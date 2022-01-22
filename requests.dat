@@ -1,0 +1,27 @@
+# GET request with order_id 160 (does not exist)
+curl --request GET \
+  --url 'http://127.0.0.1:5000/orders?orderId=160’
+
+# POST request with client_id 16 and product 10
+curl --request POST \
+  --url 'http://127.0.0.1:5000/orders?clientId=16&productId=10'
+
+# POST request with client_id 12 and products 5, 7 and 2
+curl --request POST \
+  --url 'http://127.0.0.1:5000/orders?clientId=12&productId=5&productId=7&productId=2'
+
+# PUT request to remove (add flag != 0) product with id 5 from order_id 12
+curl --request PUT \
+  --url 'http://127.0.0.1:5000/orders?productId=5&orderId=12&addflag=1'
+
+# PUT request to add (add flag == 0) product with id 5 from order_id 12
+curl --request PUT \
+  --url 'http://127.0.0.1:5000/orders?productId=5&orderId=12&addflag=0'
+
+# DELETE request of order_id 9
+curl --request DELETE \
+  --url 'http://127.0.0.1:5000/orders?orderId=9'
+
+# PUT request of item with product_id 5 to change unit_price to 10.00
+curl --request PUT \
+  --url 'http://127.0.0.1:5000/items?productId=5&unitPrice=10'
