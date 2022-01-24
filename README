@@ -5,4 +5,4 @@ docker-compose build
 docker-compose up
 
 Em seguida já é possível enviar os comandos curl através de um
-serviço como o postman seguindo a lógica exemplificada no arquivo curl_examples.txt
+serviço como o postman seguindo a lógica exemplificada no arquivo example_curls
