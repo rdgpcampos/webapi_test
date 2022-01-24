@@ -1,0 +1,15 @@
+Enviar GET request para ver um pedido (order), dado seu id (order_id = 2)
+http://localhost:5000/orders?orderId=2
+
+Enviar uma lista de pedidos através de um POST request (client_id = 2, product_id = 4, 7)
+http://localhost:5000/orders?clientId=2&productId=4&productId=7
+
+Alterar um pedido através de um PUT request -> adicionar produto de id 2 (order_id = 4, product_id = 2, add_flag = 0)
+Quando addflag é 0, produto é adicionado ao pedido, caso contrário o produto é removido do pedido
+http://localhost:5000/orders?clientId=2&productId=4&productId=7
+
+Deletar um pedido dado seu id (order_id)
+http://localhost:5000/orders?orderId=3
+
+Alterar preço de um produto através de um PUT request (Mudar preço do produto de id 8 para 250.00)
+http://localhost:5000/items?productId=8&unitPrice=250
