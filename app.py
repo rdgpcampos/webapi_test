@@ -87,12 +87,12 @@ class order(Resource):
         con, cur = webapi_header.connect_to_db()
         
         # parse input
-        args = webapi_header.set_args('clientId','productlist','status')
+        args = webapi_header.set_args('clientId','productlist')
  
         # arguments
         client_id = args['clientId']
         product_list = args['productId']
-        status = args['status']
+        status = 'Released'
         
         # update orders table
         order_query = 'INSERT INTO "orders"(client_id, status)' +\
@@ -136,8 +136,8 @@ class order(Resource):
                         accepted_orders}, 404
  
     # update products in order
-    # addflag = True: product is added to order
-    # addflag = False: product is removed from order
+    # addflag = 0: product is added to order
+    # addflag != 0: product is removed from order
     def put(self):
         # connect to database
         con, cur = webapi_header.connect_to_db()
@@ -160,7 +160,7 @@ class order(Resource):
             return {'This order was cancelled.' : None}, 404
  
         # put
-        if addflag == 'True':
+        if addflag == 0:
             item_order_id = str(order_id)
             query_add = ' AND order_id IS NULL'
         else:
