@@ -160,7 +160,7 @@ class order(Resource):
             return {'This order was cancelled.' : None}, 404
  
         # put
-        if addflag == 0:
+        if addflag == 'True':
             item_order_id = str(order_id)
             query_add = ' AND order_id IS NULL'
         else:
@@ -179,7 +179,7 @@ class order(Resource):
         product_info = cur.fetchone()
         
         # cancel order if it results in no items after last put
-        if addflag != 0:
+        if addflag != 'True':
             check_order_query = 'SELECT COUNT(*) FROM items WHERE order_id = ' +\
                                 str(order_id)
             try:
@@ -202,7 +202,7 @@ class order(Resource):
 
         if product_info is None:
             return {'Item not available for this order.' : None}, 404
-        elif addflag == 0:
+        elif addflag == 'True':
             return {'Item was added to order.' : None,
                     'Item ID:' : product_info[0],
                     'Item description:' : product_info[1]},200

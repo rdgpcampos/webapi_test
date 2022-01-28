@@ -37,7 +37,8 @@ def set_args(*args):
                             type=str)
     
     if 'addflag' in args:
-        parser.add_argument('addflag', required=False, default = 0, type=int)
+        parser.add_argument('addflag', required=False, choices=['True', 'False'],
+        default = 'True', type=str)
     
     if 'unitPrice' in args:
         parser.add_argument('unitPrice', required=True, type=float)
