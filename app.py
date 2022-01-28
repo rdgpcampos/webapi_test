@@ -259,10 +259,7 @@ clubbi_api.add_resource(order, '/orders',endpoint="orders")
 
 
 class item(Resource):
-    def get(self):
-        return {'Skipping GET request' : None},200
-    # update item price
-   
+    # update item price   
     def put(self):
         # connect to database
         con, cur = webapi_header.connect_to_db()
