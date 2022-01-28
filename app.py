@@ -26,6 +26,15 @@ class order(Resource):
         # arguments
         order_id = args['orderId']
         
+        # check whether order was cancelled first
+        status_code = webapi_header.if_cancelled(cur,order_id)
+        if status_code == 1:
+            return {'Bad gateway' : None}, 502
+        elif status_code == 2:
+            return {'Invalid order ID' : None}, 404
+        elif status_code == 3:
+            return {'This order was cancelled.' : None}, 404
+        
         # get items
         item_query = 'SELECT product_id, description FROM items ' +\
                 'WHERE order_id = ' + str(order_id)
@@ -39,7 +48,6 @@ class order(Resource):
         products_ids = []
         products_desc = []
         
-        # get price
         prod_str = ''
         for product in products:
              prod_str += '{product[0]}, '
@@ -51,17 +59,8 @@ class order(Resource):
         for product in products:
              prod_desc_str += '{product[1]}, '
         prod_desc_str
-        
-        # check whether order was cancelled first
-        status_code = webapi_header.if_cancelled(cur,order_id)
-        if status_code == 1:
-            return {'Bad gateway' : None}, 502
-        elif status_code == 2:
-            return {'Invalid order ID' : None}, 404
-        elif status_code == 3:
-            return {'This order was cancelled.' : None}, 404
-        
-        # output items and total price of order
+    
+        # get price
         price_query = 'SELECT SUM(unit_price) FROM items ' +\
                     'WHERE order_id = ' + str(order_id) 
         try:
@@ -73,6 +72,7 @@ class order(Resource):
         
         con.close()
         
+        # output items and total price of order
         if total_price is not None:
             return {'Products ordered by ID:' : products_ids,
                     'Products ordered by description:' : products_desc,    
@@ -87,12 +87,12 @@ class order(Resource):
         con, cur = webapi_header.connect_to_db()
         
         # parse input
-        args = webapi_header.set_args('clientId','productlist','status')
+        args = webapi_header.set_args('clientId','productlist')
  
         # arguments
         client_id = args['clientId']
         product_list = args['productId']
-        status = args['status']
+        status = 'Released'
         
         # update orders table
         order_query = 'INSERT INTO "orders"(client_id, status)' +\
@@ -136,8 +136,8 @@ class order(Resource):
                         accepted_orders}, 404
  
     # update products in order
-    # addflag = True: product is added to order
-    # addflag = False: product is removed from order
+    # addflag = 0: product is added to order
+    # addflag != 0: product is removed from order
     def put(self):
         # connect to database
         con, cur = webapi_header.connect_to_db()
@@ -166,6 +166,7 @@ class order(Resource):
         else:
             item_order_id = 'NULL'
             query_add = ' AND order_id = ' + str(order_id)
+
         query = 'UPDATE items SET order_id = ' + item_order_id +\
                 ' WHERE product_id = ' + str(product_id) +\
                 query_add + ' RETURNING product_id, description'
